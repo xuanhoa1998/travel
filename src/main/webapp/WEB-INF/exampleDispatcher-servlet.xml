@@ -41,6 +41,17 @@
 
     <tx:annotation-driven proxy-target-class="true" transaction-manager="txManager"/>
 
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/admin/*"/>
+            <bean class="vn.nuce.interceptor.AdminInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/login"/>
+            <bean class="vn.nuce.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
     <context:component-scan base-package="vn.nuce"/>
 
     <mvc:resources mapping="/resources/**" location="/resources/"/>

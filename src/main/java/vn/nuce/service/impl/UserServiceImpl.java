@@ -4,8 +4,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.nuce.dto.UserDto;
+import vn.nuce.entity.UserEntity;
 import vn.nuce.repository.impl.UserRepositoryImpl;
 import vn.nuce.service.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,5 +34,17 @@ public class UserServiceImpl implements UserService {
             dto = getInstanceMapper().map(objects[1], UserDto.class);
         }
         return new Object[]{isSuccess, dto};
+    }
+
+    @Override
+    public List<UserDto> findAllUsers() {
+        List<UserEntity> entities = repository.findAll();
+        List<UserDto> dtos = new ArrayList<>();
+        if (entities.size() > 0) {
+            for (UserEntity entity : entities) {
+                dtos.add(mapper.map(entity,UserDto.class));
+            }
+        }
+        return dtos;
     }
 }
