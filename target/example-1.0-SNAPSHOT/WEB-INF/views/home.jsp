@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/common/taglib.jsp" %>
 <c:url value="/login" var="loginUrl"/>
+<c:url value="/logout" var="logoutUrl" />
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,10 +54,20 @@
                                                                             aria-hidden="true"></i></a></li>
                             </ul>
                         </div>
-                        <div class="user_box ml-auto">
-                            <div class="user_box_login user_box_link"><a href="${loginUrl}">login</a></div>
-                            <div class="user_box_register user_box_link"><a href="#">register</a></div>
-                        </div>
+                        <c:choose>
+                            <c:when test="${empty dto}">
+                                <div class="user_box ml-auto">
+                                    <div class="user_box_login user_box_link"><a href="${loginUrl}">login</a></div>
+                                    <div class="user_box_register user_box_link"><a href="#">register</a></div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="user_box ml-auto">
+                                    <div class="user_box_login user_box_link"><a href="#">Welcome, ${dto.username}</a></div>
+                                    <div class="user_box_register user_box_link"><a href="${logoutUrl}">logout</a></div>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>

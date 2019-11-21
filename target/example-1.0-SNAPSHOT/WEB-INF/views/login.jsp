@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/common/taglib.jsp" %>
+<c:url var="checkLoginUrl" value="/login"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,15 +10,19 @@
     <!--===============================================================================================-->
     <link rel="icon" type="image/png" href="<c:url value='/resources/login/images/icons/favicon.ico'/>"/>
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="<c:url value='/resources/login/vendor/bootstrap/css/bootstrap.min.css'/>">
+    <link rel="stylesheet" type="text/css"
+          href="<c:url value='/resources/login/vendor/bootstrap/css/bootstrap.min.css'/>">
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="<c:url value='/resources/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css'/>">
+    <link rel="stylesheet" type="text/css"
+          href="<c:url value='/resources/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css'/>">
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="<c:url value='/resources/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css'/>">
+    <link rel="stylesheet" type="text/css"
+          href="<c:url value='/resources/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css'/>">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="<c:url value='/resources/login/vendor/animate/animate.css'/>">
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="<c:url value='/resources/login/vendor/css-hamburgers/hamburgers.min.css'/>">
+    <link rel="stylesheet" type="text/css"
+          href="<c:url value='/resources/login/vendor/css-hamburgers/hamburgers.min.css'/>">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="<c:url value='/resources/login/vendor/select2/select2.min.css'/>">
     <!--===============================================================================================-->
@@ -28,9 +33,11 @@
 <body>
 
 <div class="limiter">
-    <div class="container-login100" style="background-image: url('<c:url value='/resources/login/images/img-01.jpg'/>');">
+    <div class="container-login100"
+         style="background-image: url('<c:url value='/resources/login/images/img-01.jpg'/>');">
         <div class="wrap-login100 p-t-190 p-b-30">
-            <form class="login100-form validate-form">
+            <spring:form cssClass="login100-form validate-form" method="post" action="${checkLoginUrl}"
+                         modelAttribute="userDto">
                 <div class="login100-form-avatar">
                     <img src="<c:url value='/resources/login/images/avatar-01.jpg'/>" alt="AVATAR">
                 </div>
@@ -39,8 +46,14 @@
 						John Doe
 					</span>
 
+                <c:if test="${not empty error}">
+                    <span class="text-danger" style="margin-bottom: 20px;padding: 20px;background-color: #FFF">
+                            ${error}
+                    </span>
+                </c:if>
+
                 <div class="wrap-input100 validate-input m-b-10" data-validate="Username is required">
-                    <input class="input100" type="text" name="username" placeholder="Username">
+                    <spring:input cssClass="input100" path="username"/>
                     <span class="focus-input100"></span>
                     <span class="symbol-input100">
 							<i class="fa fa-user"></i>
@@ -48,7 +61,7 @@
                 </div>
 
                 <div class="wrap-input100 validate-input m-b-10" data-validate="Password is required">
-                    <input class="input100" type="password" name="pass" placeholder="Password">
+                    <spring:password cssClass="input100" path="password"/>
                     <span class="focus-input100"></span>
                     <span class="symbol-input100">
 							<i class="fa fa-lock"></i>
@@ -56,24 +69,9 @@
                 </div>
 
                 <div class="container-login100-form-btn p-t-10">
-                    <button class="login100-form-btn">
-                        Login
-                    </button>
+                    <input class="login100-form-btn" value="Login" type="submit" style="cursor: pointer">
                 </div>
-
-<%--                <div class="text-center w-full p-t-25 p-b-230">--%>
-<%--                    <a href="#" class="txt1">--%>
-<%--                        Forgot Username / Password?--%>
-<%--                    </a>--%>
-<%--                </div>--%>
-
-<%--                <div class="text-center w-full">--%>
-<%--                    <a class="txt1" href="#">--%>
-<%--                        Create new account--%>
-<%--                        <i class="fa fa-long-arrow-right"></i>--%>
-<%--                    </a>--%>
-<%--                </div>--%>
-            </form>
+            </spring:form>
         </div>
     </div>
 </div>
