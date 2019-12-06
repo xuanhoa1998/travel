@@ -8,6 +8,7 @@ import vn.nuce.entity.UserEntity;
 import vn.nuce.repository.impl.UserRepositoryImpl;
 import vn.nuce.service.UserService;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +43,35 @@ public class UserServiceImpl implements UserService {
         List<UserDto> dtos = new ArrayList<>();
         if (entities.size() > 0) {
             for (UserEntity entity : entities) {
-                dtos.add(mapper.map(entity,UserDto.class));
+                dtos.add(mapper.map(entity, UserDto.class));
             }
         }
         return dtos;
+    }
+
+    @Override
+    public void saveUser(UserDto userDto) {
+        userDto.setDate(new Timestamp(System.currentTimeMillis()));
+        repository.save(mapper.map(userDto, UserEntity.class));
+    }
+
+    @Override
+    public Integer deleteUser(List<Long> ids) {
+        return repository.delete(ids);
+    }
+
+    @Override
+    public UserDto findOneUser(Long id) {
+        return mapper.map(repository.findOne(id),UserDto.class);
+    }
+
+    @Override
+    public UserDto updateUser(UserDto dto) {
+        return mapper.map(
+                repository.update(
+                        mapper.map(dto,UserEntity.class)
+                ),
+                UserDto.class
+        );
     }
 }

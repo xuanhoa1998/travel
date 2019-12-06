@@ -8,7 +8,25 @@ public class UserDto implements Serializable {
     private String username;
     private String password;
     private Timestamp date;
+    private String dateFormat;
     private String role;
+    private String fullName;
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setDateFormat(String dateFormat) {
+        this.dateFormat = dateFormat;
+    }
 
     public Long getUserId() {
         return userId;

@@ -28,12 +28,39 @@
     <link href="<c:url value="/resources/admin/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css"/>"
           rel="stylesheet">
 
+    <!-- Bootstrap Select Css -->
+    <link href="<c:url value="/resources/admin/plugins/bootstrap-select/css/bootstrap-select.css"/>" rel="stylesheet"/>
+
     <!-- Custom Css -->
     <link href="<c:url value="/resources/admin/css/style.css"/>" rel="stylesheet">
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="<c:url value="/resources/admin/css/themes/all-themes.css"/>" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .modal {
+            text-align: center;
+            padding: 0 !important;
+        }
+
+        .modal:before {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            margin-right: -4px;
+        }
+
+        .modal-dialog {
+            display: inline-block;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .button-style {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 
 <body class="theme-red">
@@ -344,6 +371,13 @@
             <h2>
                 JQUERY DATATABLES
             </h2>
+            <c:if test="${not empty status}">
+                <div class="alert alert-success alert-dismissible" style="margin-top: 20px" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <strong>Thành công!</strong> Bạn nên kiểm tra lại dữ liệu bên dưới.
+                </div>
+            </c:if>
         </div>
         <!-- Basic Examples -->
         <div class="row clearfix">
@@ -353,25 +387,16 @@
                         <h2>
                             BASIC EXAMPLE
                         </h2>
-                        <ul class="header-dropdown m-r--5">
-                            <li class="dropdown">
-                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"
-                                   role="button" aria-haspopup="true" aria-expanded="false">
-                                    <i class="material-icons">more_vert</i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="javascript:void(0);">Insert User</a></li>
-                                    <li><a href="javascript:void(0);">Update User</a></li>
-                                    <li><a href="javascript:void(0);">Delete User</a></li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <button class="btn btn-circle pull-right" id="button-save">
+                            <i class="fa fa-user-plus"></i>
+                        </button>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                 <thead>
                                 <tr>
+                                    <th>FullName</th>
                                     <th>Username</th>
                                     <th>Password</th>
                                     <th>Date</th>
@@ -381,6 +406,7 @@
                                 </thead>
                                 <tfoot>
                                 <tr>
+                                    <th>FullName</th>
                                     <th>Username</th>
                                     <th>Password</th>
                                     <th>Date</th>
@@ -391,18 +417,23 @@
                                 <tbody>
                                 <c:forEach var="user" items="${users}">
                                     <tr>
+                                        <td>${user.fullName}</td>
                                         <td>${user.username}</td>
                                         <td>${user.password}</td>
-                                        <td>${user.date}</td>
+                                        <td>${user.dateFormat}</td>
                                         <td>${user.role}</td>
-                                        <td>
-                                            <button class="btn btn-circle" data-toggle="modal"
-                                                    data-target="#exampleModalCenter">
+                                        <td style="display: flex">
+                                            <button type="button" class="btn btn-circle" style="margin-right: 10px"
+                                                    id="btn-edit" onclick="updateUser(${user.userId})">
                                                 <i class="fa fa-edit"></i>
                                             </button>
-                                            <button class="btn btn-circle">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
+                                            <form action="/admin/user" method="get" id="form-delete">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="id" value="${user.userId}">
+                                                <button class="btn btn-circle" type="button" onclick="handleDelete()">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -422,7 +453,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Thêm / Cập nhật thông tin nhân viên</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -434,42 +465,46 @@
                             <form id="form_validation" method="POST">
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="name" required>
-                                        <label class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="fullName" name="fullName" required>
+                                        <label class="form-label">FullName</label>
                                     </div>
                                 </div>
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="surname" required>
-                                        <label class="form-label">Surname</label>
+                                        <input type="text" class="form-control" id="username" name="username" required>
+                                        <label class="form-label">Username</label>
                                     </div>
                                 </div>
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="email" class="form-control" name="email" required>
-                                        <label class="form-label">Email</label>
-                                    </div>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="password" class="form-control" name="password" required>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                               required>
                                         <label class="form-label">Password</label>
                                     </div>
                                 </div>
-                                <button class="btn btn-primary waves-effect" type="submit">SUBMIT</button>
+                                <div class="form-group form-float">
+                                    <div class="form-inline">
+                                        <select class="form-control show-tick" id="userRole" name="role" required>
+                                            <option value="">-- Please select --</option>
+                                            <option value="ROLE_ADMIN">ADMIN</option>
+                                            <option value="ROLE_USER">USER</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="userId" id="userId" value="">
+                                <button type="button" id="btn-save" class="btn btn-primary pull-right">Save Changes
+                                </button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-<%--            <div class="modal-footer">--%>
-<%--                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--%>
-<%--                <button type="button" class="btn btn-primary">Save changes</button>--%>
-<%--            </div>--%>
+            <div class="modal-footer">
+
+            </div>
         </div>
     </div>
 </div>
-
 <!-- Jquery Core Js -->
 <script src="<c:url value="/resources/admin/plugins/jquery/jquery.min.js"/>"></script>
 
@@ -500,11 +535,100 @@
 <!-- Custom Js -->
 <script src="<c:url value="/resources/admin/js/admin.js"/>"></script>
 <script src="<c:url value="/resources/admin/js/pages/tables/jquery-datatable.js"/>"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
 <!-- Demo Js -->
 <script src="<c:url value="/resources/admin/js/demo.js"/>"></script>
 <script src="<c:url value="/resources/admin/js/pages/forms/form-validation.js"/>"></script>
+<script>
+    $(document).ready(function () {
+        let form_validation = $('#form_validation');
+        $('#btn-save').on('click', function () {
+            let userId = $('#userId').val();
+            if (userId !== "") {
+                form_validation.attr('action', '/admin/user/update');
+            } else {
+                form_validation.attr('action', '/admin/user/create');
+            }
+            form_validation.submit();
+        });
+        $('#button-save').on('click',function () {
+            clearDataForInputText($('#fullName'),"");
+            clearDataForInputText($('#username'),"");
+            clearDataForInputText($('#password'),"");
+            clearDataForInputText($('#userId'),"");
+            $('#userRole').val("");
+            $('#userRole').selectpicker('refresh');
+            $('#exampleModalCenter').modal('toggle');
+        });
+    });
+
+    function updateUser(id) {
+        let fullName = $('#fullName');
+        let username = $('#username');
+        let password = $('#password');
+        let role = $('#userRole');
+        let userId = $('#userId');
+        $.ajax({
+            url: '/admin/user/' + id,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: '',
+            success: function (data) {
+                setDataForInputText(fullName, data.fullName);
+                setDataForInputText(username, data.username);
+                setDataForInputText(password, data.password);
+                setDataForInputText(userId, data.userId);
+                role.val(data.role);
+                role.selectpicker('refresh');
+                $('#exampleModalCenter').modal('toggle');
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function setDataForInputText(field, data) {
+        field.closest('div').addClass('focused');
+        field.val(data);
+    }
+
+    function clearDataForInputText(field, data) {
+        field.closest('div').removeClass('focused');
+        field.val(data);
+    }
+
+    function handleDelete() {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: "button-style"
+        });
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+        }).then((result) => {
+            if (result.value) {
+                $('#form-delete').submit();
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your imaginary file is safe :)',
+                    'error'
+                )
+            }
+        });
+    }
+</script>
 </body>
 
 </html>
-

@@ -16,8 +16,10 @@ public class LoginInterceptor implements HandlerInterceptor {
             UserDto dto = (UserDto) session.getAttribute("user");
             if (dto.getRole().equals("ROLE_USER")) {
                 response.sendRedirect("/home");
+                return false;
             } else if (dto.getRole().equals("ROLE_ADMIN")) {
                 response.sendRedirect("/admin/home");
+                return false;
             }
         }
         return true;

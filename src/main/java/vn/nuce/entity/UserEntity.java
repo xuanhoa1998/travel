@@ -18,6 +18,16 @@ public class UserEntity implements Serializable {
     private Timestamp date;
     @Column(name = "role")
     private String role;
+    @Column(name = "fullname")
+    private String fullName;
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
     public Long getUserId() {
         return userId;

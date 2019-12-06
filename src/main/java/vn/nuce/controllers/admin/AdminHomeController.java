@@ -3,12 +3,14 @@ package vn.nuce.controllers.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import vn.nuce.Utils;
 import vn.nuce.dto.UserDto;
 import vn.nuce.service.impl.UserServiceImpl;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequestMapping("/admin")
 @Controller
@@ -22,7 +24,62 @@ public class AdminHomeController {
             UserDto dto = (UserDto) session.getAttribute("user");
             modelMap.addAttribute("dto", dto);
         }
-        modelMap.addAttribute("users",service.findAllUsers());
+        List<UserDto> users = service.findAllUsers();
+        users.forEach(user -> {
+            user.setDateFormat(Utils.formatDate(String.valueOf(user.getDate())));
+        });
+        modelMap.addAttribute("users", users);
+        if (session.getAttribute("status") != null) {
+            modelMap.addAttribute("status",session.getAttribute("status"));
+            session.removeAttribute("status");
+        }
         return "/admin/home";
+    }
+
+    @GetMapping("/user/{id}")
+    @ResponseBody
+    public UserDto getUserDto(@PathVariable Long id) {
+        return service.findOneUser(id);
+    }
+
+    @GetMapping("/user")
+    public String updateUser(@RequestParam(name = "action") String action,
+                             @RequestParam(name = "id") Long userId,
+                             HttpSession session) {
+        if (action.equals("delete")) {
+            List<Long> ids = new ArrayList<>();
+            ids.add(userId);
+            service.deleteUser(ids);
+            session.setAttribute("status","success");
+        }
+        return "redirect:/admin/home";
+    }
+
+    @PostMapping("/user/{action}")
+    public String saveUser(@PathVariable String action,
+                           @RequestParam(name = "userId") Long userId,
+                           @RequestParam(name = "fullName") String fullName,
+                           @RequestParam(name = "username") String username,
+                           @RequestParam(name = "password") String password,
+                           @RequestParam(name = "role") String role,
+                           HttpSession session) {
+        UserDto userDto = new UserDto();
+        userDto.setFullName(fullName);
+        String encodePassword = Utils.encodePasswordMD5(password);
+        userDto.setPassword(encodePassword);
+        userDto.setUsername(username);
+        userDto.setRole(role);
+        switch (action) {
+            case "create":
+                service.saveUser(userDto);
+                session.setAttribute("status","success");
+                break;
+            case "update":
+                userDto.setUserId(userId);
+                service.updateUser(userDto);
+                session.setAttribute("status","success");
+                break;
+        }
+        return "redirect:/admin/home";
     }
 }
