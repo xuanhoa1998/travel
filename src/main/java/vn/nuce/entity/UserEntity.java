@@ -14,8 +14,6 @@ public class UserEntity implements Serializable {
     private String username;
     @Column(name = "password")
     private String password;
-    @Column(name = "date")
-    private Timestamp date;
     @Column(name = "role")
     private String role;
     @Column(name = "fullname")
@@ -51,14 +49,6 @@ public class UserEntity implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Timestamp getDate() {
-        return date;
-    }
-
-    public void setDate(Timestamp date) {
-        this.date = date;
     }
 
     public String getRole() {

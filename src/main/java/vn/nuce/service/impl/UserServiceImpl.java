@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(UserDto userDto) {
-        userDto.setDate(new Timestamp(System.currentTimeMillis()));
         repository.save(mapper.map(userDto, UserEntity.class));
     }
 
@@ -67,10 +66,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto dto) {
+        UserEntity entity = repository.update(mapper.map(dto,UserEntity.class));
         return mapper.map(
-                repository.update(
-                        mapper.map(dto,UserEntity.class)
-                ),
+                entity,
                 UserDto.class
         );
     }

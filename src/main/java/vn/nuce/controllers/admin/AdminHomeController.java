@@ -6,10 +6,16 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import vn.nuce.Utils;
 import vn.nuce.dto.UserDto;
+import vn.nuce.entity.UserEntity;
 import vn.nuce.service.impl.UserServiceImpl;
 
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RequestMapping("/admin")
@@ -25,9 +31,6 @@ public class AdminHomeController {
             modelMap.addAttribute("dto", dto);
         }
         List<UserDto> users = service.findAllUsers();
-        users.forEach(user -> {
-            user.setDateFormat(Utils.formatDate(String.valueOf(user.getDate())));
-        });
         modelMap.addAttribute("users", users);
         if (session.getAttribute("status") != null) {
             modelMap.addAttribute("status",session.getAttribute("status"));

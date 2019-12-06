@@ -399,7 +399,6 @@
                                     <th>FullName</th>
                                     <th>Username</th>
                                     <th>Password</th>
-                                    <th>Date</th>
                                     <th>Role</th>
                                     <th>Action</th>
                                 </tr>
@@ -409,7 +408,6 @@
                                     <th>FullName</th>
                                     <th>Username</th>
                                     <th>Password</th>
-                                    <th>Date</th>
                                     <th>Role</th>
                                     <th>Action</th>
                                 </tr>
@@ -420,7 +418,6 @@
                                         <td>${user.fullName}</td>
                                         <td>${user.username}</td>
                                         <td>${user.password}</td>
-                                        <td>${user.dateFormat}</td>
                                         <td>${user.role}</td>
                                         <td style="display: flex">
                                             <button type="button" class="btn btn-circle" style="margin-right: 10px"

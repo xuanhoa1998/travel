@@ -7,8 +7,6 @@ public class UserDto implements Serializable {
     private Long userId;
     private String username;
     private String password;
-    private Timestamp date;
-    private String dateFormat;
     private String role;
     private String fullName;
 
@@ -18,14 +16,6 @@ public class UserDto implements Serializable {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public String getDateFormat() {
-        return dateFormat;
-    }
-
-    public void setDateFormat(String dateFormat) {
-        this.dateFormat = dateFormat;
     }
 
     public Long getUserId() {
@@ -50,14 +40,6 @@ public class UserDto implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Timestamp getDate() {
-        return date;
-    }
-
-    public void setDate(Timestamp date) {
-        this.date = date;
     }
 
     public String getRole() {
