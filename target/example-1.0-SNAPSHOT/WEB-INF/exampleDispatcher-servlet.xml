@@ -43,7 +43,7 @@
 
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/admin/*"/>
+            <mvc:mapping path="/admin/**"/>
             <bean class="vn.nuce.interceptor.AdminInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>

@@ -343,9 +343,15 @@
             <ul class="list">
                 <li class="header">MAIN NAVIGATION</li>
                 <li>
-                    <a href="#">
+                    <a href="/admin/home">
                         <i class="material-icons">home</i>
-                        <span>Home</span>
+                        <span>Quản lý tài khoản</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/tours">
+                        <i class="material-icons">list</i>
+                        <span>Quản lý địa điểm du lịch</span>
                     </a>
                 </li>
             </ul>
@@ -385,7 +391,7 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            BASIC EXAMPLE
+                            TABLE USER
                         </h2>
                         <button class="btn btn-circle pull-right" id="button-save">
                             <i class="fa fa-user-plus"></i>
@@ -424,13 +430,10 @@
                                                     id="btn-edit" onclick="updateUser(${user.userId})">
                                                 <i class="fa fa-edit"></i>
                                             </button>
-                                            <form action="/admin/user" method="get" id="form-delete">
-                                                <input type="hidden" name="action" value="delete">
-                                                <input type="hidden" name="id" value="${user.userId}">
-                                                <button class="btn btn-circle" type="button" onclick="handleDelete()">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                            </form>
+                                            <button class="btn btn-circle" type="button"
+                                                    onclick="handleDelete(${user.userId})">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -549,11 +552,11 @@
             }
             form_validation.submit();
         });
-        $('#button-save').on('click',function () {
-            clearDataForInputText($('#fullName'),"");
-            clearDataForInputText($('#username'),"");
-            clearDataForInputText($('#password'),"");
-            clearDataForInputText($('#userId'),"");
+        $('#button-save').on('click', function () {
+            clearDataForInputText($('#fullName'), "");
+            clearDataForInputText($('#username'), "");
+            clearDataForInputText($('#password'), "");
+            clearDataForInputText($('#userId'), "");
             $('#userRole').val("");
             $('#userRole').selectpicker('refresh');
             $('#exampleModalCenter').modal('toggle');
@@ -597,7 +600,7 @@
         field.val(data);
     }
 
-    function handleDelete() {
+    function handleDelete(userId) {
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success',
@@ -615,7 +618,7 @@
             cancelButtonText: 'No, cancel!',
         }).then((result) => {
             if (result.value) {
-                $('#form-delete').submit();
+                window.location.href = "/admin/user?action=delete&id=" + userId;
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 swalWithBootstrapButtons.fire(
                     'Cancelled',

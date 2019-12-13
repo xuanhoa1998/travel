@@ -83,7 +83,7 @@ public class CrudRepositoryImpl<ID extends Serializable, T> implements CrudRepos
                 entity = sessionFactory.getCurrentSession().get(persistenceClass,id);
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return entity;
     }

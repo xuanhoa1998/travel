@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         List<UserDto> dtos = new ArrayList<>();
         if (entities.size() > 0) {
             for (UserEntity entity : entities) {
-                dtos.add(mapper.map(entity, UserDto.class));
+                dtos.add(getInstanceMapper().map(entity, UserDto.class));
             }
         }
         return dtos;
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(UserDto userDto) {
-        repository.save(mapper.map(userDto, UserEntity.class));
+        repository.save(getInstanceMapper().map(userDto, UserEntity.class));
     }
 
     @Override
@@ -61,13 +61,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findOneUser(Long id) {
-        return mapper.map(repository.findOne(id),UserDto.class);
+        return getInstanceMapper().map(repository.findOne(id),UserDto.class);
     }
 
     @Override
     public UserDto updateUser(UserDto dto) {
-        UserEntity entity = repository.update(mapper.map(dto,UserEntity.class));
-        return mapper.map(
+        UserEntity entity = repository.update(getInstanceMapper().map(dto,UserEntity.class));
+        return getInstanceMapper().map(
                 entity,
                 UserDto.class
         );

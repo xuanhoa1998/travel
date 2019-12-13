@@ -68,17 +68,18 @@ public class AdminHomeController {
                            HttpSession session) {
         UserDto userDto = new UserDto();
         userDto.setFullName(fullName);
-        String encodePassword = Utils.encodePasswordMD5(password);
-        userDto.setPassword(encodePassword);
         userDto.setUsername(username);
         userDto.setRole(role);
         switch (action) {
             case "create":
+                String encodePassword = Utils.encodePasswordMD5(password);
+                userDto.setPassword(encodePassword);
                 service.saveUser(userDto);
                 session.setAttribute("status","success");
                 break;
             case "update":
                 userDto.setUserId(userId);
+                userDto.setPassword(password);
                 service.updateUser(userDto);
                 session.setAttribute("status","success");
                 break;
